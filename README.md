@@ -21,7 +21,7 @@ This GitHub Action enables developers to validate CloudFormation templates again
 
 ## 📂 Example Usage
 
-# Example 1
+### Example 1
 ```yaml
 name: Validate CloudFormation Templates
 
@@ -44,8 +44,8 @@ jobs:
           rule_set_url: 'https://raw.githubusercontent.com/your-org/rules-repo/main/custom.guard'
           show_summary: 'all'
           output_format: 'json'
-
-# Example 2 (chaining for PRs containing templates - added or modified)
+```
+### Example 2 (chaining for PRs containing templates - added or modified)
 ```yaml
 name: Validate PR CloudFormation Templates
 
@@ -84,7 +84,7 @@ jobs:
           rule_set_url: 'https://raw.githubusercontent.com/your-org/rules/main/custom.guard'
           show_summary: 'fail'
           output_format: 'single-line-summary'
-
+```
 ## 🧱 Implementation Details
 
 This action:
