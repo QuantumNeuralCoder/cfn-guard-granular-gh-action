@@ -1,0 +1,1 @@
+# cfn-guard-granular-gh-action
