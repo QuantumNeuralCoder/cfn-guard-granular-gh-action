@@ -21,6 +21,7 @@ This GitHub Action enables developers to validate CloudFormation templates again
 
 ## 📂 Example Usage
 
+# Example 1
 ```yaml
 name: Validate CloudFormation Templates
 
@@ -37,12 +38,53 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Validate CFN templates with cfn-guard
-        uses: indradey/cfn-guard-granular-gh-action@v1
+        uses: QuantumNeuralCoder/cfn-guard-granular-gh-action@v1
         with:
           data_directory: './templates'
           rule_set_url: 'https://raw.githubusercontent.com/your-org/rules-repo/main/custom.guard'
           show_summary: 'all'
           output_format: 'json'
+
+# Example 2 (chaining for PRs containing templates - added or modified)
+```yaml
+name: Validate PR CloudFormation Templates
+
+on:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Needed for full git history
+
+      - name: Get list of changed .template.json files
+        id: get_changed
+        run: |
+          mkdir -p changed_templates
+          git diff --name-status origin/main...HEAD | grep -E '^(A|M)\s+.*\.template\.json$' | awk '{print $2}' > changed_files.txt
+          while IFS= read -r file; do
+            cp --parents "$file" changed_templates/
+          done < changed_files.txt
+
+          if [ -s changed_files.txt ]; then
+            echo "files_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "files_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate changed templates
+        if: steps.get_changed.outputs.files_changed == 'true'
+        uses: QuantumNeuralCoder/cfn-guard-granular-gh-action@v1
+        with:
+          data_directory: './changed_templates'
+          rule_set_url: 'https://raw.githubusercontent.com/your-org/rules/main/custom.guard'
+          show_summary: 'fail'
+          output_format: 'single-line-summary'
+
 ## 🧱 Implementation Details
 
 This action:

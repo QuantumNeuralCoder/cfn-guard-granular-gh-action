@@ -7,8 +7,13 @@ if [ -z "$INPUT_DATA_DIRECTORY" ]; then
 fi
 
 if [ ! -d "$INPUT_DATA_DIRECTORY" ]; then
-  echo "Path $INPUT_DATA_DIRECTORY does not exist. Quitting."
-  exit 1
+  echo "Path $INPUT_DATA_DIRECTORY does not exist. Skipping validation."
+  exit 0
+fi
+
+if ! ls "$INPUT_DATA_DIRECTORY"/*.json "$INPUT_DATA_DIRECTORY"/*.yml 1> /dev/null 2>&1; then
+  echo "No CloudFormation templates found in $INPUT_DATA_DIRECTORY. Skipping validation."
+  exit 0
 fi
 
 if [ -n "$INPUT_RULE_SET_URL" ]; then
