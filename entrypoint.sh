@@ -11,7 +11,7 @@ if [ ! -d "$INPUT_DATA_DIRECTORY" ]; then
   exit 0
 fi
 
-if ! ls "$INPUT_DATA_DIRECTORY"/*.json "$INPUT_DATA_DIRECTORY"/*.yml 1> /dev/null 2>&1; then
+if ! ls "$INPUT_DATA_DIRECTORY"/*.json "$INPUT_DATA_DIRECTORY"/*.json 1> /dev/null 2>&1; then
   echo "No CloudFormation templates found in $INPUT_DATA_DIRECTORY. Skipping validation."
   exit 0
 fi

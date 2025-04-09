@@ -8,9 +8,10 @@ WORKDIR /app
 
 # Download and install cfn-guard
 RUN curl -L -o cfn-guard.tar.gz https://github.com/aws-cloudformation/cloudformation-guard/releases/latest/download/cfn-guard-v3-x86_64-ubuntu-latest.tar.gz && \
-    tar -xzf cfn-guard.tar.gz -C /usr/local/bin && \
+    tar -xzf cfn-guard.tar.gz && \
+    mv cfn-guard-v3-*/cfn-guard /usr/local/bin/cfn-guard && \
     chmod +x /usr/local/bin/cfn-guard && \
-    rm -f cfn-guard.tar.gz
+    rm -rf cfn-guard.tar.gz cfn-guard-v3-*
 
 # Copy your entrypoint script
 COPY entrypoint.sh /entrypoint.sh
